@@ -16,7 +16,6 @@ pub mod behaviour_hiding{
 - Pull updates from remote:     shield pull
 - Remove a file from repository:  shield remove <\"file_name\">
 - Move a file to a different directory: shield mv <\"file_name\"> <\"new_path\">
-- 
             ");
         }
         
