@@ -1,6 +1,6 @@
-mod machine_hiding{
-    mod file_system_operation{
-        mod  file_permission{
+pub mod machine_hiding{
+    pub mod file_system_operation{
+        pub mod file_permission{
             pub fn get_permissions(){         
             }
 
