@@ -1,6 +1,6 @@
-mod Machine_Hiding{
+mod machine_hiding{
 
-    mod  OS_Detection{
+    mod os_detection{
         pub fn detect_OS() {
 
         }

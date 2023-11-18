@@ -1,6 +1,6 @@
-mod Machine_Hiding{
-    mod File_System_Operation{
-        mod  File_Basic{
+mod machine_hiding{
+    mod file_system_operation{
+        mod  file_basic{
             pub fn write() {
 
             }

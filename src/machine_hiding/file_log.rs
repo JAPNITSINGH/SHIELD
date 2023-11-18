@@ -1,5 +1,5 @@
-mod Machine_Hiding{
-    mod File_Log{
+mod machine_hiding{
+    mod file_log{
         pub fn cat() {
 
         }
