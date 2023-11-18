@@ -1,99 +1,101 @@
+mod behaviour_hiding;
+
 fn main() {
-    println!("Hello, world!");
+    behaviour_hiding::input::behaviour_hiding::input_management::initialization();
 }
 
 
-mod Machine_Hiding{
+// mod Machine_Hiding{
 
-    mod  OS_Detection{
-        pub fn detect_OS() {
+//     mod  OS_Detection{
+//         pub fn detect_OS() {
 
-        }
-    }
+//         }
+//     }
 
-    mod File_System_Operation{
+//     mod File_System_Operation{
 
-        mod  File_Basic{
-            pub fn write() {
+//         mod  File_Basic{
+//             pub fn write() {
 
-            }
+//             }
 
-            pub fn read() {
+//             pub fn read() {
 
-            }
+//             }
 
-        }
+//         }
 
-        mod File_Permission{
+//         mod File_Permission{
 
-            pub fn get_permissions(){         
-            }
+//             pub fn get_permissions(){         
+//             }
 
-            pub fn set_permissions(){
+//             pub fn set_permissions(){
 
-            }
-        }
-    }
+//             }
+//         }
+//     }
     
-    mod File_Log{
-        pub fn cat() {
+//     mod File_Log{
+//         pub fn cat() {
 
-        }
+//         }
 
-        // pub fn retrieve() {
-        //     // This function gets contents of a file at a partivular version. 
-        // }
-
-
-    }
+//         // pub fn retrieve() {
+//         //     // This function gets contents of a file at a partivular version. 
+//         // }
 
 
-}
+//     }
 
-mod  Behaviour_Hiding{
 
-    mod  Input_Management{
-        pub fn initialization() {
+// }
 
-        }
-    }
+// mod  Behaviour_Hiding{
 
-    mod Output_Management{
-        pub fn print_message() {
+//     mod  Input_Management{
+//         pub fn initialization() {
 
-        }
-    }
+//         }
+//     }
 
-}
+//     mod Output_Management{
+//         pub fn print_message() {
 
-mod Reppsitory_Hiding{
+//         }
+//     }
 
-    mod  Repository_Local{
+// }
 
-        mod Merge_Conflict{
-            pub fn merge() {
+// mod Reppsitory_Hiding{
 
-            }
+//     mod  Repository_Local{
 
-            fn merge_file() {
+//         mod Merge_Conflict{
+//             pub fn merge() {
 
-            }
-        }
+//             }
 
-        mod  Repository_Versioning{
-            pub fn branch(){
+//             fn merge_file() {
 
-            }
-        }
-    }
+//             }
+//         }
 
-    mod Repository_Origin{
-        // pub fn clone(){
+//         mod  Repository_Versioning{
+//             pub fn branch(){
 
-        // }
+//             }
+//         }
+//     }
 
-        pub fn init(){
+//     mod Repository_Origin{
+//         // pub fn clone(){
 
-        }
-    }
-}
+//         // }
+
+//         pub fn init(){
+
+//         }
+//     }
+// }
