@@ -1,14 +1,4 @@
-mod Reppsitory_Hiding{
-    mod  Repository_Local{
-        mod Merge_Conflict{
-            
-            pub fn merge() {
 
-            }
+pub fn merge() {}
 
-            fn merge_file() {
-
-            }
-        }
-    }
-}
+fn merge_file() {}

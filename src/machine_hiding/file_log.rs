@@ -1,11 +1,6 @@
-mod machine_hiding{
-    mod file_log{
-        pub fn cat() {
 
-        }
+pub fn cat() {}
 
-        // pub fn retrieve() {
-        //     // This function gets contents of a file at a partivular version. 
-        // }
-    }
-}
+// pub fn retrieve() {
+//     // This function gets contents of a file at a partivular version.
+// }

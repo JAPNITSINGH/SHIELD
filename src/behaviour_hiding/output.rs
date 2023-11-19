@@ -1,11 +1,10 @@
-pub mod behaviour_hiding{
-    pub mod output_management{
-        pub fn print_message(message:&str){
-            println!("{}",message);
-        }
-        
-        pub fn print_help(){
-            println!("
+pub fn print_message(message: &str) {
+    println!("{}", message);
+}
+
+pub fn print_help() {
+    println!(
+        "
             These are shield commands commonly used:
 
             - Initialize a new repository:   shield init
@@ -17,11 +16,13 @@ pub mod behaviour_hiding{
             - Pull updates from remote:     shield pull
             - Remove a file from repository:  shield remove <\"file_name\">
             - Move a file to a different directory: shield mv <\"file_name\"> <\"new_path\">
-            ");
-        }
-        
-        pub fn print_welcome(){
-            print!("
+            "
+    );
+}
+
+pub fn print_welcome() {
+    print!(
+        "
             Welcome to S.H.I.E.L.D - The Distributed Version Control System
 
             S.H.I.E.L.D efficiently handles projects of any size with speed and accuracy.
@@ -42,7 +43,6 @@ pub mod behaviour_hiding{
             Happy coding!
 
             (c) 2023 AVENGERS Team - CSC 253/453
-            ");
-        }
-    }
+            "
+    );
 }
