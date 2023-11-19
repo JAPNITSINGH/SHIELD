@@ -16,9 +16,9 @@ pub mod behaviour_hiding{
                 let user_input = user_input.trim_end();
                 let user_input = user_input.trim_start();
 
-                if user_input == "quit" {
-                    break;
-                }
+                // if user_input == "quit" {
+                //     break;
+                // }
                 
                 // divide the input message to a vec, each element represents a word, for exampele, user input = shield add, args = ["shield", "add"].
                 if !user_input.contains(' '){
@@ -56,9 +56,6 @@ pub mod behaviour_hiding{
                 }
             }
         }
-        
-        
-        
-        
+
     }
 }
