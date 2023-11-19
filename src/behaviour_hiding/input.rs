@@ -2,6 +2,7 @@ pub mod behaviour_hiding{
     pub mod input_management{
         use std::{io::{self, Write}, env::args};
         use crate::behaviour_hiding::output::behaviour_hiding::output_management;
+        use crate::machine_hiding::os_detection::machine_hiding::os_detection;
         use shellwords;
 
         pub fn initialization(){
@@ -51,6 +52,8 @@ pub mod behaviour_hiding{
                     match args[1]{
                         "help" =>  output_management::print_help(),
                         "quit" =>  std::process::exit(0),
+                        "init" => output_management::print_help(),
+                        "pwd" =>  println!("{}",os_detection::pwd()),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
                 }

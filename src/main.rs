@@ -1,5 +1,5 @@
 mod behaviour_hiding;
-
+mod machine_hiding;
 fn main() {
     behaviour_hiding::input::behaviour_hiding::input_management::initialization();
 }
