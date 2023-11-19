@@ -1,8 +1,7 @@
-mod machine_hiding{
-
-    mod os_detection{
-        pub fn detect_OS() {
-
+pub mod Machine_Hiding{
+    pub mod  OS_Detection{
+        pub fn detect_OS()->&'static str{
+            std::env::consts::OS
         }
     }
 }
