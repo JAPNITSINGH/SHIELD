@@ -1,5 +1,6 @@
 use crate::behaviour_hiding::output;
-use crate::machine_hiding::os_detection;
+use crate::machine_hiding::{os_detection,file_system_operation::file_basic};
+
 use shellwords;
 use std::{
     env::args,
@@ -18,9 +19,9 @@ pub fn initialization() {
         let user_input = user_input.trim_end();
         let user_input = user_input.trim_start();
 
-        // if user_input == "quit" {
-        //     break;
-        // }
+        if user_input == "exit" {
+            break;
+        }
 
         // divide the input message to a vec, each element represents a word, for exampele, user input = shield add, args = ["shield", "add"].
         if !user_input.contains(' ') {
@@ -55,8 +56,20 @@ fn divide_command(args: Vec<&str>) {
                         "quit" =>  std::process::exit(0),
                         "init" => output::print_help(),
                         "pwd" =>  println!("{}",os_detection::pwd()),
+                        "createfile"=> process_create(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
+    }
+}
+
+fn process_create(args:Vec<&str>){
+    if args.len()<=2{
+        println!("please enter a filename");
+    }else if args.len()>3{
+        println!("No space in a file name, or you can add double quotes on the file name");
+    }else{    
+        let mut f = file_basic::FileStruct::new(args[2].to_string());
+        f.create_file();
     }
 }
