@@ -5,7 +5,7 @@
 //         match os {
 //             "linux" => {
 //                 println!("Running on Linux");
-//                 fs::metadata(file_path).map(|metadata| metadata.permissions())
+//              w   fs::metadata(file_path).map(|metadata| metadata.permissions())
 //             },
 //             "windows" => {
 //                 println!("Running on Windows");

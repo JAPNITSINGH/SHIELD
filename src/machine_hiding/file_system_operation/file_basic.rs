@@ -5,7 +5,7 @@ use std::fs;
 use std::fs::File;
 use std::io::{self, Write};
 use std::path::PathBuf;
-
+use crate::behaviour_hiding::output;
 pub struct FileStruct {
     file_name: String,
     perm: bool,
@@ -21,13 +21,20 @@ impl FileStruct {
     }
 
     pub fn create_file(&self) -> io::Result<()> {
-        let mut filepath =PathBuf::from(&self.cwd);
+        let mut filepath = PathBuf::from(&self.cwd);
         filepath.push(&self.file_name);
-        let mut f = File::create(filepath);
+    
+        match File::create(&filepath) {
+            Ok(_) => output::print_message("File created successfully"),
+            Err(e) => {
+                output::print_message("Failed to create file");
+                return Err(e);
+            }
+        }
+    
         Ok(())
     }
 }
-
 // pub fn add(f:File){
 //     todo!()
 // }
@@ -51,9 +58,29 @@ impl FileStruct {
 // pub fn rename(f:File){
 //     todo!()
 // }
-pub fn create_folder(pwd:String) {
+
+pub fn create_folder(create_dir: &str) -> std::io::Result<()> {
+    let cwd = os_detection::pwd();
+    let mut path = PathBuf::from(cwd);
+    path.push(create_dir);
+
+    match fs::create_dir_all(&path) {
+        Ok(_) => {
+            println!("Folder created successfully.");
+            Ok(())
+        },
+        Err(e) => {
+            println!("Failed to create folder: {:?}", e);
+            //Err(e)
+            Ok(())
+        }
+    }
+}
+
+pub fn write() {
     
 }
-pub fn write() {}
 
-pub fn read() {}
+pub fn read() {
+    
+}

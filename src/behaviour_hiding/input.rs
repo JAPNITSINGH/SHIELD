@@ -57,6 +57,7 @@ fn divide_command(args: Vec<&str>) {
                         "init" => output::print_help(),
                         "pwd" =>  println!("{}",os_detection::pwd()),
                         "createfile"=> process_create(args),
+                        "createfolder" => process_create_folder(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -65,11 +66,22 @@ fn divide_command(args: Vec<&str>) {
 
 fn process_create(args:Vec<&str>){
     if args.len()<=2{
-        println!("please enter a filename");
+        println!("please enter a file name");
     }else if args.len()>3{
         println!("No space in a file name, or you can add double quotes on the file name");
     }else{    
         let mut f = file_basic::FileStruct::new(args[2].to_string());
         f.create_file();
+    }
+}
+
+fn process_create_folder(args:Vec<&str>){
+    if args.len()<=2{
+        println!("please enter a folder name");
+    }else if args.len()>3{
+        println!("No space in a folder name, use slash \"/\" to separate the folder name");
+    }else{    
+        //let mut f = file_basic::FileStruct::new();
+        file_basic::create_folder(args[2]);
     }
 }
