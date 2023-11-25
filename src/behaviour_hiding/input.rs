@@ -58,6 +58,7 @@ fn divide_command(args: Vec<&str>) {
                         "pwd" =>  println!("{}",os_detection::pwd()),
                         "createfile"=> process_create(args),
                         "createfolder" => process_create_folder(args),
+                        "cd" => process_cd(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -84,4 +85,8 @@ fn process_create_folder(args:Vec<&str>){
         //let mut f = file_basic::FileStruct::new();
         file_basic::create_folder(args[2]);
     }
+}
+
+fn process_cd(args:Vec<&str>){
+    os_detection::pwd_move(args[2]);
 }
