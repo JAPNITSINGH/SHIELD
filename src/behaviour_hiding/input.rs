@@ -88,5 +88,11 @@ fn process_create_folder(args:Vec<&str>){
 }
 
 fn process_cd(args:Vec<&str>){
-    os_detection::pwd_move(args[2]);
+    if args.len()<=2 {
+        output::print_message(os_detection::pwd().as_str());
+    }else{
+        os_detection::pwd_move(args[2]);
+        output::print_message(os_detection::pwd().as_str());
+    }
+    
 }
