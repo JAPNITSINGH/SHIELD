@@ -59,6 +59,7 @@ fn divide_command(args: Vec<&str>) {
                         "createfile"=> process_create(args),
                         "createfolder" => process_create_folder(args),
                         "cd" => process_cd(args),
+                        "write" => process_write(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -94,5 +95,15 @@ fn process_cd(args:Vec<&str>){
         os_detection::pwd_move(args[2]);
         output::print_message(os_detection::pwd().as_str());
     }
-    
+}
+
+fn process_write(args:Vec<&str>){
+    if args.len()<=2{
+        output::print_message("please enter your file name and the content you want to add");
+    }else if args.len()==3{
+        output::print_message("please enter your content");
+    }else{
+        let mut f = file_basic::FileStruct::new(args[2].to_string());
+        f.write(args[3]);
+    }
 }
