@@ -60,7 +60,7 @@ fn divide_command(args: Vec<&str>) {
                         //"pwd" =>  println!("{}",os_detection::pwd()),
                         "createfile"=> process_create(args),
                         "createfolder" => process_create_folder(args),
-                        "branch" => repository_versioning::branch_main(args[]),
+                        "branch" => repository_versioning::branch_main(args),
                         "cd" => process_cd(args),
                         "write" => process_write(args),
                         "ls" => process_ls(),
