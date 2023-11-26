@@ -1,5 +1,6 @@
 mod behaviour_hiding;
 mod machine_hiding;
+mod repository_hiding;
 
 fn main() {
     behaviour_hiding::input::initialization();

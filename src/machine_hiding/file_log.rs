@@ -1,17 +1,26 @@
+use sha1::{Sha1, Digest};
 use std::time::{SystemTime, UNIX_EPOCH};
-use std::hash::{Hash, Hasher};
-use std::collections::hash_map::DefaultHasher;
 
-pub fn generate_commit_id(file_name: &str) -> u64 {
-    let now = SystemTime::now();
-    let since_the_epoch = now.duration_since(UNIX_EPOCH)
-        .expect("Time went backwards");
-    let time = since_the_epoch.as_secs() * 1_000 + since_the_epoch.subsec_millis() as u64;
+pub fn generate_commit_id(contents: &[String], first_commit: bool) -> String {
+    if first_commit {
+        "0000000000000000000000000000000000000000".to_string()
+    } else {
+        let now = SystemTime::now();
+        let since_the_epoch = now.duration_since(UNIX_EPOCH)
+            .expect("Time went backwards");
+        let time = since_the_epoch.as_secs();
 
-    let mut hasher = DefaultHasher::new();
-    file_name.hash(&mut hasher);
-    time.hash(&mut hasher);
-    hasher.finish()
+        let mut hasher = Sha1::new();
+
+        hasher.update(time.to_be_bytes());
+
+        for content in contents {
+            hasher.update(content);
+        }
+
+        let hash = hasher.finalize();
+        format!("{:x}", hash)
+    }
 }
 
 // #[derive(Debug, Clone)]
