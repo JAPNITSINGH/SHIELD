@@ -3,7 +3,7 @@ use crate::machine_hiding::{os_detection,file_system_operation::file_basic};
 
 use shellwords;
 use std::{
-    env::args,
+    // env::args,
     io::{self, Write},
 };
 
@@ -38,7 +38,7 @@ pub fn initialization() {
                 }
             };
             let args: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
-            println!("{:?}", args);
+            //println!("{:?}", args);
             divide_command(args);
         }
     }
@@ -55,7 +55,7 @@ fn divide_command(args: Vec<&str>) {
                         "help" =>  output::print_help(),
                         "quit" =>  std::process::exit(0),
                         "init" => output::print_help(),
-                        "pwd" =>  println!("{}",os_detection::pwd()),
+                        //"pwd" =>  println!("{}",os_detection::pwd()),
                         "createfile"=> process_create(args),
                         "createfolder" => process_create_folder(args),
                         "cd" => process_cd(args),
@@ -73,7 +73,7 @@ fn process_create(args:Vec<&str>){
         println!("No space in a file name, or you can add double quotes on the file name");
     }else{    
         let mut f = file_basic::FileStruct::new(args[2].to_string());
-        f.create_file();
+        let _ = f.create_file();
     }
 }
 
@@ -84,16 +84,16 @@ fn process_create_folder(args:Vec<&str>){
         println!("No space in a folder name, use slash \"/\" to separate the folder name");
     }else{    
         //let mut f = file_basic::FileStruct::new();
-        file_basic::create_folder(args[2]);
+        let _ = file_basic::create_folder(args[2]);
     }
 }
 
 fn process_cd(args:Vec<&str>){
     if args.len()<=2 {
-        output::print_message(os_detection::pwd().as_str());
+        let _ = output::print_message(os_detection::pwd().as_str());
     }else{
-        os_detection::pwd_move(args[2]);
-        output::print_message(os_detection::pwd().as_str());
+        let _ = os_detection::pwd_move(args[2]);
+        let _ =  output::print_message(os_detection::pwd().as_str());
     }
 }
 
@@ -104,6 +104,6 @@ fn process_write(args:Vec<&str>){
         output::print_message("please enter your content");
     }else{
         let mut f = file_basic::FileStruct::new(args[2].to_string());
-        f.write(args[3]);
+        let _ = f.write(args[3]);
     }
 }

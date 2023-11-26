@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use crate::behaviour_hiding::output;
 use crate::machine_hiding::file_system_operation::file_permission;
 use std::fs::OpenOptions;
-use std::io::prelude::*;
+//use std::io::prelude::*;
 
 pub struct FileStruct {
     file_name: String,
@@ -20,11 +20,11 @@ impl FileStruct {
     pub fn new(file_name: String) -> FileStruct {
         let cwd = os_detection::pwd();
         let fp = file_name.clone()+&cwd;
-        let mut perm = file_permission::Permission{
+        let perm = file_permission::Permission{
             readable: true,
             writable: true,
         };
-        println!("{} {}",perm.writable,perm.readable);
+        //println!("{} {}",perm.writable,perm.readable);
         FileStruct { file_name, perm, cwd }
     }
 

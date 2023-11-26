@@ -2,6 +2,7 @@ use std::env;
 use std::path::Path;
 use std::io;
 
+#[allow(non_snake_case)]
 pub fn detect_OS()->&'static str{
     std::env::consts::OS
 }
