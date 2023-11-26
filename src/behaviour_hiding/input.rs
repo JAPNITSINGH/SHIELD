@@ -60,6 +60,7 @@ fn divide_command(args: Vec<&str>) {
                         "createfolder" => process_create_folder(args),
                         "cd" => process_cd(args),
                         "write" => process_write(args),
+                        "ls" => process_ls(),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -106,4 +107,8 @@ fn process_write(args:Vec<&str>){
         let mut f = file_basic::FileStruct::new(args[2].to_string());
         let _ = f.write(args[3]);
     }
+}
+
+fn process_ls(){
+    let _ = os_detection::ls();
 }
