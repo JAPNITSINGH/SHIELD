@@ -1,5 +1,6 @@
 use crate::behaviour_hiding::output;
 use crate::machine_hiding::{os_detection,file_system_operation::file_basic};
+use crate::repository_hiding::{repository_origin,repository_local::repository_versioning};
 
 use shellwords;
 use std::{
@@ -54,10 +55,11 @@ fn divide_command(args: Vec<&str>) {
             match args[1]{
                         "help" =>  output::print_help(),
                         "quit" =>  std::process::exit(0),
-                        "init" => output::print_help(),
+                        "init" => repository_origin::init_main(),
                         //"pwd" =>  println!("{}",os_detection::pwd()),
                         "createfile"=> process_create(args),
                         "createfolder" => process_create_folder(args),
+                        "branch" => repository_versioning::branch_main(args[]),
                         "cd" => process_cd(args),
                         "write" => process_write(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
