@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 shellwords="1.0"
+regex= "1"
+colored = "2.0"
+sha1 = "0.10.6"
