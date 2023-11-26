@@ -19,7 +19,7 @@ pub struct FileStruct {
 impl FileStruct {
     pub fn new(file_name: String) -> FileStruct {
         let cwd = os_detection::pwd();
-        let fp = file_name.clone()+&cwd;
+        
         let perm = file_permission::Permission{
             readable: true,
             writable: true,
@@ -53,11 +53,15 @@ impl FileStruct {
         Ok(())
     }
     
-    pub fn read(&self) {
-        if self.perm.readable == true{
+    pub fn read(&self) ->String {
+        let fpr = self.cwd.clone()+"/"+self.file_name.clone().as_str();
 
-        }else{
-            output::print_message("The file cannot be read, you have to acquire permission first.");
+        if self.perm.readable == true{
+            return fs::read_to_string(fpr).unwrap_or_else(|err| {
+                "Failed to Read, please check the file is exist or not".to_string()
+            });
+        }else{  
+            return "The file cannot be read, you have to acquire permission first.".to_string();
         }
     }
     

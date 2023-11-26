@@ -2,6 +2,7 @@ use crate::behaviour_hiding::output;
 use crate::machine_hiding::{os_detection,file_system_operation::file_basic};
 
 use shellwords;
+use std::sync::Arc;
 use std::{
     // env::args,
     io::{self, Write},
@@ -27,7 +28,7 @@ pub fn initialization() {
         if !user_input.contains(' ') {
             let mut args = Vec::new();
             args.push(user_input);
-            println!("{:?}", args);
+            //println!("{:?}", args);
             divide_command(args);
         } else {
             let args = match shellwords::split(user_input) {
@@ -61,6 +62,7 @@ fn divide_command(args: Vec<&str>) {
                         "cd" => process_cd(args),
                         "write" => process_write(args),
                         "ls" => process_ls(),
+                        "read" =>process_read(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -71,7 +73,7 @@ fn process_create(args:Vec<&str>){
     if args.len()<=2{
         println!("please enter a file name");
     }else if args.len()>3{
-        println!("No space in a file name, or you can add double quotes on the file name");
+        println!("No space in a file name, if you insist, you can add double quotes on the file name");
     }else{    
         let mut f = file_basic::FileStruct::new(args[2].to_string());
         let _ = f.create_file();
@@ -111,4 +113,15 @@ fn process_write(args:Vec<&str>){
 
 fn process_ls(){
     let _ = os_detection::ls();
+}
+fn process_read(args:Vec<&str>){
+    if args.len()<=2{
+        output::print_message("Please input the file name that you want to read");
+    }else if args.len()>3{
+        println!("No space in a file name, if you insist, you can add double quotes on the file name");
+    }else{
+        let mut f = file_basic::FileStruct::new(args[2].to_string());
+        let fileread = f.read();
+        output::print_message(fileread.as_str());
+    }
 }

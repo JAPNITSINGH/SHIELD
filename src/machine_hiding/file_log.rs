@@ -14,11 +14,6 @@ pub fn generate_commit_id(file_name: &str) -> u64 {
     hasher.finish()
 }
 
-
-
-
-
-
 // #[derive(Debug, Clone)]
 // pub struct Log {
 //     file_path: String,
