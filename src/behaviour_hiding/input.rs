@@ -53,6 +53,7 @@ fn divide_command(args: Vec<&str>) {
         } else if args.len() == 1 {
             println!("please tell us what's your command, if you don't know, type \"shield help\" to get some help");
         } else {
+            // TODO: put the commands and description in a map as an improvement
             match args[1]{
                         "help" =>  output::print_help(),
                         "quit" =>  std::process::exit(0),
@@ -62,7 +63,7 @@ fn divide_command(args: Vec<&str>) {
                         "createfolder" => process_create_folder(args),
                         "branch" => repository_versioning::branch_main(args),
                         "cd" => process_cd(args),
-                        "write" => process_write(args),
+                        "write" => process_write(args), // only for testing
                         "ls" => process_ls(),
                         "read" =>process_read(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])

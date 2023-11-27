@@ -10,6 +10,7 @@ use crate::machine_hiding::file_system_operation::file_permission;
 use std::fs::OpenOptions;
 //use std::io::prelude::*;
 
+// TODO: create a trait
 pub struct FileStruct {
     file_name: String,
     perm:file_permission::Permission,
@@ -33,7 +34,7 @@ impl FileStruct {
         filepath.push(&self.file_name);
     
         match File::create(&filepath) {
-            Ok(_) => output::print_message("File created successfully"),
+            Ok(_) =>{} //output::print_message("File created successfully"),
             Err(e) => {
                 output::print_message("Failed to create file");
                 return Err(e);
@@ -67,7 +68,7 @@ impl FileStruct {
     
 }
 
-
+// create_folder and create_file should be in one method of function
 pub fn create_folder(create_dir: &str) -> std::io::Result<()> {
     let cwd = os_detection::pwd();
     let mut path = PathBuf::from(cwd);
@@ -75,7 +76,7 @@ pub fn create_folder(create_dir: &str) -> std::io::Result<()> {
 
     match fs::create_dir_all(&path) {
         Ok(_) => {
-            println!("Folder created successfully.");
+            //println!("Folder created successfully.");
             Ok(())
         },
         Err(e) => {
