@@ -1,27 +1,26 @@
+
 use sha1::{Sha1, Digest};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-pub fn generate_commit_id(contents: &[String], first_commit: bool) -> String {
-    if first_commit {
-        "0000000000000000000000000000000000000000".to_string()
-    } else {
-        let now = SystemTime::now();
-        let since_the_epoch = now.duration_since(UNIX_EPOCH)
-            .expect("Time went backwards");
-        let time = since_the_epoch.as_secs();
+pub fn generate_hash_id(filename: &String) -> String {
+    let now = SystemTime::now();
+    let since_the_epoch = now.duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+    let time = since_the_epoch.as_secs();
 
-        let mut hasher = Sha1::new();
+    let mut hasher = Sha1::new();
 
-        hasher.update(time.to_be_bytes());
+    hasher.update(time.to_be_bytes());
+    hasher.update(filename);
 
-        for content in contents {
-            hasher.update(content);
-        }
-
-        let hash = hasher.finalize();
-        format!("{:x}", hash)
-    }
+    let hash = hasher.finalize();
+    return format!("{:x}", hash)
 }
+
+
+
+
+
 
 // #[derive(Debug, Clone)]
 // pub struct Log {

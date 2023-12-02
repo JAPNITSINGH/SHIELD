@@ -72,6 +72,7 @@ fn divide_command(args: Vec<&str>) {
                         "folder_is_exist" => process_is_exist(args),
                         "file_is_exist" => process_file_is_exist(args),
                         "file_list" => process_file_list(args),
+                        "add" => repository_versioning::add_files(),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
