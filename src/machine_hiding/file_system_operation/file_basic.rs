@@ -4,6 +4,7 @@ use std::fs;
 //use std::io::Result;
 use std::fs::File;
 use std::io::{self, Write};
+
 use std::path::PathBuf;
 use crate::behaviour_hiding::output;
 use crate::machine_hiding::file_system_operation::file_permission;
@@ -63,6 +64,16 @@ impl FileStruct {
         }else{  
             return "The file cannot be read, you have to acquire permission first.".to_string();
         }
+    }
+
+    pub fn remove(&self)-> io::Result<()>{
+        let fpr = self.cwd.clone()+"/"+self.file_name.clone().as_str();
+
+        match fs::remove_file(fpr) {
+            Ok(_) =>println!("{} has been successfully removed!",self.file_name),
+            Err(e) => println!("Failed to remove the file, please check if the file exists!")
+        }
+        Ok(())    
     }
     
 }
