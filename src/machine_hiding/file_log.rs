@@ -2,7 +2,7 @@
 use sha1::{Sha1, Digest};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-pub fn generate_commit_id(filename: String) -> String {
+pub fn generate_hash_id(filename: &String) -> String {
     let now = SystemTime::now();
     let since_the_epoch = now.duration_since(UNIX_EPOCH)
         .expect("Time went backwards");
@@ -14,7 +14,7 @@ pub fn generate_commit_id(filename: String) -> String {
     hasher.update(filename);
 
     let hash = hasher.finalize();
-    format!("{:x}", hash)
+    return format!("{:x}", hash)
 }
 
 

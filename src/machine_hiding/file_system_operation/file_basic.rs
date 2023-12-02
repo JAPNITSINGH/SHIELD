@@ -30,6 +30,10 @@ impl FileStruct {
         FileStruct { file_name, perm, cwd }
     }
 
+    pub fn get_file_name(&self) -> &String{
+        return &self.file_name;
+    }
+
     pub fn create_file(&self) -> io::Result<()> {
         let mut filepath = PathBuf::from(&self.cwd);
         filepath.push(&self.file_name);
