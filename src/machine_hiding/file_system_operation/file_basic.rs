@@ -125,6 +125,13 @@ pub fn remove_folder(remove_dir:&str)->std::io::Result<()>{
         }
     }
 }
+
+pub fn folder_is_exist(folder_name:&str)->bool{
+    let cwd = os_detection::pwd();
+    let mut path = PathBuf::from(cwd);
+    path.push(folder_name);
+    path.exists() && path.is_dir()
+}
 // pub fn add(f:File){
 //     todo!()
 // }
