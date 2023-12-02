@@ -68,6 +68,7 @@ fn divide_command(args: Vec<&str>) {
                         "read" =>process_read(args),
                         "remove" => process_remove(args),
                         "mv" =>process_mv(args),
+                        "remove_folder" => process_remove_folder(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -152,5 +153,16 @@ fn process_mv(args: Vec<&str>){
     }else{
         let mut f = file_basic::FileStruct::new(args[2].to_string());
         let _ = f.mv(args[3]);
+    }
+}
+
+fn process_remove_folder(args:Vec<&str>){
+    if args.len()<=2{
+        println!("please enter a folder name");
+    }else if args.len()>3{
+        println!("No space in a folder name, use slash \"/\" to separate the folder name");
+    }else{    
+        //let mut f = file_basic::FileStruct::new();
+        let _ = file_basic::remove_folder(args[2]);
     }
 }

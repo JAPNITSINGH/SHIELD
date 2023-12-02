@@ -102,13 +102,29 @@ pub fn create_folder(create_dir: &str) -> std::io::Result<()> {
             Ok(())
         },
         Err(e) => {
-            println!("Failed to create folder: {:?}", e);
+            println!("Failed to create folder");
             //Err(e)
             Ok(())
         }
     }
 }
 
+pub fn remove_folder(remove_dir:&str)->std::io::Result<()>{
+    let cwd = os_detection::pwd();
+    let mut path = PathBuf::from(cwd);
+    path.push(remove_dir);
+
+    match fs::remove_dir_all(&path) {
+        Ok(_) => {
+            Ok(())
+        },
+        Err(e) => {
+            println!("Failed to remove folder");
+            //Err(e)
+            Ok(())
+        }
+    }
+}
 // pub fn add(f:File){
 //     todo!()
 // }
