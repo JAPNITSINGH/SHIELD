@@ -31,11 +31,6 @@ It allows you to collaborate seamlessly with your team, no matter where you are.
 Getting started:
 - Initialize a new repository:   shield init
 - Clone an existing repository:  shield clone <\"repo_url\">
-- Check your current status:    shield status
-- Add files to staging:         shield add <\"file_name\">
-- Commit your changes:          shield commit <\"your message\">
-- Push changes to remote:       shield push
-- Pull updates from remote:     shield pull
 
 For more commands and usage information, type 'shield help'.
 
