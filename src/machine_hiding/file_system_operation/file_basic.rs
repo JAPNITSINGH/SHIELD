@@ -88,6 +88,16 @@ impl FileStruct {
         }
         Ok(())
     }
+    pub fn file_is_exist(&self)->bool{
+        let fpr = self.cwd.clone()+"/"+self.file_name.clone().as_str();
+        let path = PathBuf::from(fpr);
+
+        if path.exists() {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 // create_folder and create_file should be in one method of function
@@ -132,26 +142,3 @@ pub fn folder_is_exist(folder_name:&str)->bool{
     path.push(folder_name);
     path.exists() && path.is_dir()
 }
-// pub fn add(f:File){
-//     todo!()
-// }
-
-// pub fn remove(f:File){
-//     todo!()
-// }
-
-// pub fn read(f:File){
-//     todo!()
-// }
-
-// pub fn write(f:File){
-//     todo!()
-// }
-
-// pub fn mv(f:File, addr:&str){
-//     todo!()
-// }
-
-// pub fn rename(f:File){
-//     todo!()
-// }
