@@ -56,7 +56,7 @@ impl FileStruct {
     }
     
     pub fn read(&self) ->String {
-        let fpr = self.cwd.clone()+"/"+self.file_name.clone().as_str();
+        let fpr = self.cwd.clone()+"\\"+self.file_name.clone().as_str();
 
         if self.perm.readable == true{
             return fs::read_to_string(fpr).unwrap_or_else(|err| {
@@ -68,7 +68,7 @@ impl FileStruct {
     }
 
     pub fn remove(&self)-> io::Result<()>{
-        let fpr = self.cwd.clone()+"/"+self.file_name.clone().as_str();
+        let fpr = self.cwd.clone()+"\\"+self.file_name.clone().as_str();
 
         match fs::remove_file(fpr) {
             Ok(_) =>println!("{} has been successfully removed!",self.file_name),
@@ -76,7 +76,18 @@ impl FileStruct {
         }
         Ok(())    
     }
-    
+
+    pub fn mv(&self, target:&str) -> io::Result<()>{
+        let fpr = self.cwd.clone()+"\\"+self.file_name.clone().as_str();
+        
+        let abs_target = self.cwd.clone()+"\\"+target+"\\"+self.file_name.clone().as_str(); 
+        println!("{}",fpr);
+        match fs::rename(fpr,abs_target){
+            Ok(_)=> println!("{} has been successfully moved!", self.file_name),
+            Err(e) => println!("Failed to move the file, please check the file name and the target path!")
+        }
+        Ok(())
+    }
 }
 
 // create_folder and create_file should be in one method of function

@@ -16,6 +16,12 @@ These are shield commands commonly used:
 - Pull updates from remote:     shield pull
 - Remove a file from repository:  shield remove <\"file_name\">
 - Move a file to a different directory: shield mv <\"file_name\"> <\"new_path\">
+- Check the files and folders:  shield ls
+- Move to a specific directory      shield cd <\"folder_name\">
+- Create a file in the repo:     shield createfile <\"file_name\">
+- Create a folder in the repo:   shield createfolder <\"folder_name\">
+- Write a line in a file:        shield write <\"file_name\"> <\"content\">
+- Read a file content:           shield read <\"file_name\">  
             "
     );
 }

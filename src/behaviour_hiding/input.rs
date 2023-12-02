@@ -67,6 +67,7 @@ fn divide_command(args: Vec<&str>) {
                         "ls" => process_ls(),
                         "read" =>process_read(args),
                         "remove" => process_remove(args),
+                        "mv" =>process_mv(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -137,6 +138,19 @@ fn process_remove(args: Vec<&str>){
         println!("No space in a file name, if you insist, you can add double quotes on the file name");
     }else{
         let mut f = file_basic::FileStruct::new(args[2].to_string());
-        let fileremove = f.remove();
+        let _ =f.remove();
+    }
+}
+
+fn process_mv(args: Vec<&str>){
+    if args.len() <= 2{
+        output::print_message("Please input the file name and target address(relative) that you want to move");
+    }else if args.len() == 3{
+        output::print_message("Please input the target address(relative) that you want to move");
+    }else if args.len() > 4{
+        println!("No space in a file name, if you insist, you can add double quotes on the file name");
+    }else{
+        let mut f = file_basic::FileStruct::new(args[2].to_string());
+        let _ = f.mv(args[3]);
     }
 }
