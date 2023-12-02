@@ -4,7 +4,7 @@ use std::fs;
 //use std::io::Result;
 use std::fs::File;
 use std::io::{self, Write};
-
+use walkdir::WalkDir;
 use std::path::PathBuf;
 use crate::behaviour_hiding::output;
 use crate::machine_hiding::file_system_operation::file_permission;
@@ -13,7 +13,7 @@ use std::fs::OpenOptions;
 
 // TODO: create a trait
 pub struct FileStruct {
-    file_name: String,
+    pub file_name: String,
     perm:file_permission::Permission,
     cwd: String
 }
@@ -98,6 +98,8 @@ impl FileStruct {
             return false;
         }
     }
+
+
 }
 
 // create_folder and create_file should be in one method of function
@@ -141,4 +143,19 @@ pub fn folder_is_exist(folder_name:&str)->bool{
     let mut path = PathBuf::from(cwd);
     path.push(folder_name);
     path.exists() && path.is_dir()
+}
+
+pub fn get_file_list()->Vec<String>{
+    let cwd = os_detection::pwd();
+    let file_paths: Vec<String> = WalkDir::new(cwd)
+    .into_iter()
+    .filter_map(|e| e.ok())
+    .filter(|e| e.path().is_file())
+    .map(|e| e.path().to_string_lossy().into_owned())
+    .collect();
+
+    // for path in file_paths {
+    //     println!("{}", path);
+    // }
+    return file_paths;
 }

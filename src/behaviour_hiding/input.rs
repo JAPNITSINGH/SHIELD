@@ -71,6 +71,7 @@ fn divide_command(args: Vec<&str>) {
                         "remove_folder" => process_remove_folder(args),
                         "folder_is_exist" => process_is_exist(args),
                         "file_is_exist" => process_file_is_exist(args),
+                        "file_list" => process_file_list(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -188,5 +189,16 @@ fn process_file_is_exist(args: Vec<&str>){
     }else{
         let mut f = file_basic::FileStruct::new(args[2].to_string());
         println!("{}",f.file_is_exist());
+    }
+}
+
+fn process_file_list(args: Vec<&str>){
+    if args.len() > 2{
+        println!("No need other arguments");
+    }else{
+        let s = file_basic::get_file_list();
+
+        println!("{:?}", s);
+
     }
 }
