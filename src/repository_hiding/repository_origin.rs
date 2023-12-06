@@ -14,6 +14,9 @@ fn init_shield()-> io::Result<()>{
     file_basic::create_folder(".shield/objects");
     file_basic::create_folder(".shield/refs");
     file_basic::create_folder(".shield/logs");
+    // let mut f = file_basic::FileStruct::new(".shield/index".to_string());
+    // f.create_file();
+    
     let mut f = file_basic::FileStruct::new(".shield/HEAD".to_string());
     f.create_file();
     let _ = f.write("ref: refs/heads/master\n");
@@ -21,6 +24,7 @@ fn init_shield()-> io::Result<()>{
 
 
     file_basic::create_folder(".shield/logs/refs");
+    file_basic::create_folder(".shield/logs/refs/heads");
     let mut t = file_basic::FileStruct::new(".shield/logs/HEAD".to_string());
     let __ = t.create_file();
 

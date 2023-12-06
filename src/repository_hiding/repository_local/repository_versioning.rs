@@ -1,8 +1,44 @@
 use std::fs::{self, File};
+use std::ops::IndexMut;
 use std::path::Path;
 use std::io::{self, Write, Read};
 use crate::machine_hiding::file_system_operation::file_basic::FileStruct;
 use crate::machine_hiding::{os_detection,file_system_operation::file_basic, file_log};
+
+struct Commit{
+    commit_hash: String
+}
+
+struct RootNode {
+    root_node_id: String
+}
+
+impl Commit {
+    pub fn new() -> Self{
+        let name = "COMMIT".to_string();
+        Commit {
+            commit_hash: file_log::generate_hash_id(&name) 
+        }
+    }
+
+    pub fn get_commit_id(&self) -> &String {
+       return  &self.commit_hash;
+    }
+}
+
+impl RootNode {
+    pub fn new() -> Self{
+        let name: String = "ROOTNODE".to_string();
+        RootNode { 
+            root_node_id: file_log::generate_hash_id(&name) 
+        }
+    }
+
+    pub fn get_root_id(&self) -> &String{
+        return &self.root_node_id;
+    }
+}
+
 
 fn read_current_head(repo_path: &str) -> io::Result<String> {
     let head_path = Path::new(repo_path).join(".shield/HEAD");
@@ -56,26 +92,73 @@ pub fn branch_main(args:Vec<&str>) {
     }
 }
 
+pub fn commit_files(){
+    let new_commit: Commit = Commit::new();
+    let root_node_of_tree: RootNode = RootNode::new();
+    
+    if(is_first_commit()) {
+        let mut f_master = file_basic::FileStruct::new(".shield/refs/heads/master".to_string());
+        let mut f_master_logs = file_basic::FileStruct::new(".shield/logs/refs/heads/master".to_string());
+        let mut f_commit_file = file_basic::FileStruct::new(".shield/objects/".to_string() + new_commit.get_commit_id());
+        let mut f_root_file = file_basic::FileStruct::new(".shield/objects/".to_string() + root_node_of_tree.get_root_id());
+        let mut f_index = file_basic::FileStruct::new(".shield/index".to_string());
+
+        let index_file_content = f_index.read();
+        let master_log_content = "0000000000000000000000000000000000000000 ".to_string() + new_commit.get_commit_id();
+
+        f_master.create_file();
+        f_master_logs.create_file();
+        f_commit_file.create_file();
+        f_root_file.create_file();
+
+        f_master_logs.write(&master_log_content[..]);
+        f_master.write(new_commit.get_commit_id());
+        f_commit_file.write(&root_node_of_tree.get_root_id());
+        f_root_file.write(&index_file_content[..]);
+
+        f_index.remove();
+    }
+    else {
+
+    }
+
+}
+
 pub fn add_files(){
     let pwd = os_detection::pwd();
     let is_repo = file_basic::folder_is_exist(".shield");
     let files_list: Vec<FileStruct> = get_files_list(&pwd);
 
 
-
     if (is_repo) {
-        if (is_fist_commit()) {
-            let hash = file_log::generate_hash_id(files_list[0].get_file_name());
-            let new_file_name = ".shield/objects/".to_string() + &hash;
-            let mut f = file_basic::FileStruct::new(new_file_name);
-            let _ = f.create_file();
-        }
+        //  if (is_first_commit()) { 
         //     add_file_hash(List<File>)
         // }
         // else{
         //     compare_all_files_with_last_commit()
         //     add_file_hash(List<Files>);
         // }
+
+        // THIS STATEMENT SHOULD BE OUTSIDE ITERATOR
+        let index_file = FileStruct::new(".shield/index".to_string());
+        index_file.create_file();
+
+        // TODO: PUT THESE IN AN ITERATOR OVER files_list
+        let hash = file_log::generate_hash_id(files_list[0].get_file_name());
+        let content = files_list[0].read();
+        let new_file_name = ".shield/objects/".to_string() + &hash;
+        let f = file_basic::FileStruct::new(new_file_name);
+
+        if (is_first_commit()) {
+            f.create_file();
+            f.write(&content);
+            index_file.write(&hash);
+        }
+        else{
+            // TODO: Must be implemented after commit
+        }
+
+        // ITERATOR ENDS HERE
     }
     else{
         println!("Not a shield repository");
@@ -90,11 +173,13 @@ fn add_file_hash(){
     // manchine.add_contents_to_file(hash_id, contents)
 }
 
-fn is_fist_commit() -> bool{
-    true
+fn is_first_commit() -> bool{
+    let master_file: FileStruct = FileStruct::new(".shield/refs/heads/master".to_string());
+    return !master_file.file_is_exist();
 }
 
 fn get_files_list(pwd: &String) -> Vec<FileStruct> {
+    // TODO: Remove Hardcoded Values
     let dummy_list: Vec<FileStruct> = vec![FileStruct::new("MyFIle.txt".to_string())];
     return dummy_list;
 }
