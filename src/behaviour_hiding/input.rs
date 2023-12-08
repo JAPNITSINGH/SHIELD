@@ -74,6 +74,7 @@ fn divide_command(args: Vec<&str>) {
                         "file_list" => process_file_list(args),
                         "add" => repository_versioning::add_files(),
                         "commit" => repository_versioning::commit_files(),
+                        "clone" => process_clone(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -202,5 +203,18 @@ fn process_file_list(args: Vec<&str>){
 
         println!("{:?}", s);
 
+    }
+}
+
+fn process_clone(args: Vec<&str>){
+    if args.len() <= 2{
+        println!("Please enter the repository you want to clone");
+    }else if args.len()>3{
+        println!("No space in a path, if you want to add space, please double quote your path!");
+    }else{
+        if let Err(e) = file_basic::clone(args[2]) {
+            println!("Failed to clone the repository: {}", e);
+        }
+        println!("The repository is successfully cloned!")
     }
 }

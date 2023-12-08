@@ -5,12 +5,11 @@ use std::fs;
 use std::fs::File;
 use std::io::{self, Write};
 use walkdir::WalkDir;
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
 use crate::behaviour_hiding::output;
 use crate::machine_hiding::file_system_operation::file_permission;
 use std::fs::OpenOptions;
 //use std::io::prelude::*;
-
 // TODO: create a trait
 pub struct FileStruct {
     pub file_name: String,
@@ -76,7 +75,7 @@ impl FileStruct {
 
         match fs::remove_file(fpr) {
             Ok(_) =>println!("{} has been successfully removed!",self.file_name),
-            Err(e) => println!("Failed to remove the file, please check if the file exists!")
+            Err(e) => {}
         }
         Ok(())    
     }
@@ -102,8 +101,6 @@ impl FileStruct {
             return false;
         }
     }
-
-
 }
 
 // create_folder and create_file should be in one method of function
@@ -150,7 +147,7 @@ pub fn folder_is_exist(folder_name:&str)->bool{
 }
 
 pub fn get_file_list()->Vec<String>{
-    let cwd = os_detection::pwd();
+    let cwd: String = os_detection::pwd();
     let file_paths: Vec<String> = WalkDir::new(cwd)
     .into_iter()
     .filter_map(|e| e.ok())
@@ -162,4 +159,39 @@ pub fn get_file_list()->Vec<String>{
     //     println!("{}", path);
     // }
     return file_paths;
+}
+
+pub fn clone(target_dir:&str)-> std::io::Result<()>{
+    let cwd: String = os_detection::pwd();
+    let cwd_path = Path::new(cwd.as_str());
+    let td = Path::new(target_dir);
+    let td_shield = Path::new(target_dir).join(".shield");//full path of a .shield folder in target path
+    if td_shield.exists() && td_shield.is_dir() {
+        match fs::read_dir(cwd_path) {
+        Ok(mut entries) => {
+            if entries.next().is_none() {
+                for entry in WalkDir::new(target_dir) {
+                    let entry = entry?;
+                    let path = entry.path();
+                    let relative_path = path.strip_prefix(target_dir).unwrap();
+                    let target_path = cwd_path.join(relative_path);
+            
+                    if path.is_dir() {
+                        fs::create_dir_all(&target_path)?;
+                    } else {
+                        fs::copy(path, &target_path)?;
+                    }
+                }              
+            } else {
+                println!("The directory is not empty. Failed to clone!");
+            }
+        }
+        Err(e) => {
+            println!("Failed to read the directory: {}", e);
+        }
+    }
+    } else {
+        println!("This is not a shield repository, please check the target folder is exist and a valid shield repository or not!");
+    }
+    Ok(())
 }
