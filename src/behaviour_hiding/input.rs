@@ -71,7 +71,7 @@ fn divide_command(args: Vec<&str>) {
                         "remove_folder" => process_remove_folder(args),
                         "folder_is_exist" => process_is_exist(args),
                         "file_is_exist" => process_file_is_exist(args),
-                        "file_list" => process_file_list(args),
+                        //"file_list" => process_file_list(args),
                         "add" => repository_versioning::add_files(),
                         "commit" => repository_versioning::commit_files(),
                         "clone" => process_clone(args),
@@ -195,16 +195,16 @@ fn process_file_is_exist(args: Vec<&str>){
     }
 }
 
-fn process_file_list(args: Vec<&str>){
-    if args.len() > 2{
-        println!("No need other arguments");
-    }else{
-        let s = file_basic::get_file_list();
+// fn process_file_list(args: Vec<&str>){
+//     if args.len() > 2{
+//         println!("No need other arguments");
+//     }else{
+//         let s = file_basic::get_file_list();
 
-        println!("{:?}", s);
+//         println!("{:?}", s);
 
-    }
-}
+//     }
+// }
 
 fn process_clone(args: Vec<&str>){
     if args.len() <= 2{
