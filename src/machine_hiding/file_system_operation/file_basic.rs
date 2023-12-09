@@ -148,7 +148,7 @@ pub fn folder_is_exist(folder_name:&str)->bool{
 
 pub fn get_file_list()->Vec<FileStruct>{
     let cwd = os_detection::pwd();
-    let file_paths: Vec<String> = WalkDir::new(cwd)
+    let file_paths: Vec<String> = WalkDir::new(cwd.clone())
     .into_iter()
     .filter_map(|e| e.ok())
     .filter(|e| e.path().is_file())
@@ -156,7 +156,9 @@ pub fn get_file_list()->Vec<FileStruct>{
     .collect();
     let files_list: Vec<FileStruct> = file_paths.iter()
     .filter(|path| (!path.contains(".shield") && !path.contains(".DS_Store")))
-    .map(|path| FileStruct::new(path.to_string()))
+    .map(|path| {
+        let modified_path = path.to_string().replace(&cwd, "");
+        FileStruct::new(modified_path)})
     .collect();
     //FileStruct::new(new_file_name);
     for file in &files_list {
