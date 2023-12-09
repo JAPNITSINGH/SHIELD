@@ -146,19 +146,23 @@ pub fn folder_is_exist(folder_name:&str)->bool{
     path.exists() && path.is_dir()
 }
 
-pub fn get_file_list()->Vec<String>{
-    let cwd: String = os_detection::pwd();
+pub fn get_file_list()->Vec<FileStruct>{
+    let cwd = os_detection::pwd();
     let file_paths: Vec<String> = WalkDir::new(cwd)
     .into_iter()
     .filter_map(|e| e.ok())
     .filter(|e| e.path().is_file())
     .map(|e| e.path().to_string_lossy().into_owned())
     .collect();
-
-    // for path in file_paths {
-    //     println!("{}", path);
-    // }
-    return file_paths;
+    let files_list: Vec<FileStruct> = file_paths.iter()
+    .filter(|path| (!path.contains(".shield") && !path.contains(".DS_Store")))
+    .map(|path| FileStruct::new(path.to_string()))
+    .collect();
+    //FileStruct::new(new_file_name);
+    for file in &files_list {
+        println!("{}", file.file_name);
+    }
+    return files_list;
 }
 
 pub fn clone(target_dir:&str)-> std::io::Result<()>{
