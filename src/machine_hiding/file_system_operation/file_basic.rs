@@ -161,9 +161,9 @@ pub fn get_file_list()->Vec<FileStruct>{
         FileStruct::new(modified_path)})
     .collect();
     //FileStruct::new(new_file_name);
-    for file in &files_list {
-        println!("{}", file.file_name);
-    }
+    // for file in &files_list {
+    //     println!("{}", file.file_name);
+    // }
     return files_list;
 }
 
