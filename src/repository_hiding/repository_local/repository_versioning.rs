@@ -127,10 +127,10 @@ pub fn commit_files(){
 pub fn add_files(){
     let pwd = os_detection::pwd();
     let is_repo = file_basic::folder_is_exist(".shield");
-    let files_list: Vec<FileStruct> = get_files_list(&pwd);
+    let files_list: Vec<FileStruct> = file_basic::get_file_list();
 
 
-    if (is_repo) {
+    if is_repo {
         //  if (is_first_commit()) { 
         //     add_file_hash(List<File>)
         // }
@@ -144,20 +144,22 @@ pub fn add_files(){
         index_file.create_file();
 
         // TODO: PUT THESE IN AN ITERATOR OVER files_list
-        let hash = file_log::generate_hash_id(files_list[0].get_file_name());
-        let content = files_list[0].read();
-        let new_file_name = ".shield/objects/".to_string() + &hash;
-        let f = file_basic::FileStruct::new(new_file_name);
-
-        if (is_first_commit()) {
-            f.create_file();
-            f.write(&content);
-            index_file.write(&hash);
-        }
-        else{
-            // TODO: Must be implemented after commit
-        }
-
+        files_list.iter().for_each(|file| {
+            let hash = file_log::generate_hash_id(file.get_file_name());
+            let content = file.read();
+            let new_file_name = ".shield/objects/".to_string() + &hash;
+            let f = file_basic::FileStruct::new(new_file_name);
+        
+            if is_first_commit() {
+                f.create_file();
+                f.write(&content);
+                index_file.write(&hash);
+            }
+            else{
+                // TODO: Must be implemented after commit
+                index_file.write(&hash);
+            }
+        });
         // ITERATOR ENDS HERE
     }
     else{
@@ -176,10 +178,4 @@ fn add_file_hash(){
 fn is_first_commit() -> bool{
     let master_file: FileStruct = FileStruct::new(".shield/refs/heads/master".to_string());
     return !master_file.file_is_exist();
-}
-
-fn get_files_list(pwd: &String) -> Vec<FileStruct> {
-    // TODO: Remove Hardcoded Values
-    let dummy_list: Vec<FileStruct> = vec![FileStruct::new("MyFIle.txt".to_string())];
-    return dummy_list;
 }
