@@ -65,7 +65,7 @@ fn divide_command(args: Vec<&str>) {
                         "cd" => process_cd(args),
                         "write" => process_write(args), // only for testing
                         "ls" => process_ls(),
-                        "read" =>process_read(args),
+                        "cat" =>process_read(args),
                         "remove" => process_remove(args),
                         "mv" =>process_mv(args),
                         "remove_folder" => process_remove_folder(args),
