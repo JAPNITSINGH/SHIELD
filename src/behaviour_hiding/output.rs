@@ -21,7 +21,7 @@ These are shield commands commonly used:
 - Create a file in the repo:     shield createfile <\"file_name\">
 - Create a folder in the repo:   shield createfolder <\"folder_name\">
 - Write a line in a file:        shield write <\"file_name\"> <\"content\">
-- Read a file content:           shield read <\"file_name\">  
+- Read a file content:           shield cat <\"file_name\">  
             "
     );
 }

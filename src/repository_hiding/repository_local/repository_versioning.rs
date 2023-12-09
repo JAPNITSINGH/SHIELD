@@ -122,6 +122,29 @@ pub fn commit_files(){
         f_index.remove();
     }
     else {
+        let mut f_master = file_basic::FileStruct::new(".shield/refs/heads/master".to_string());
+        let mut f_master_logs = file_basic::FileStruct::new(".shield/logs/refs/heads/master".to_string());
+        let mut f_commit_file = file_basic::FileStruct::new(".shield/objects/".to_string() + new_commit.get_commit_id());
+        let mut f_root_file = file_basic::FileStruct::new(".shield/objects/".to_string() + root_node_of_tree.get_root_id());
+        println!("{}", f_root_file.file_name);
+        let mut f_index = file_basic::FileStruct::new(".shield/index".to_string());
+        println!("{}",&f_index.file_name);
+        let index_file_content = f_index.read();
+        let master_log_content = f_master.read() + new_commit.get_commit_id();
+
+        f_master.remove();
+        f_master.create_file();
+        f_commit_file.create_file();
+        f_root_file.create_file();
+
+        f_master_logs.write(&master_log_content[..]);
+        f_master.write(new_commit.get_commit_id());
+        f_commit_file.write(&root_node_of_tree.get_root_id());
+        f_root_file.write(&index_file_content[..]);
+
+        println!("{}", &index_file_content);
+
+        f_index.remove();
 
     }
 
@@ -130,7 +153,7 @@ pub fn commit_files(){
 pub fn add_files(){
     let pwd = os_detection::pwd();
     let is_repo = file_basic::folder_is_exist(".shield");
-    let files_list: Vec<FileStruct> = file_basic::get_file_list();
+    let mut files_list: Vec<FileStruct> = file_basic::get_file_list();
 
 
     if is_repo {
@@ -146,25 +169,34 @@ pub fn add_files(){
         let index_file = FileStruct::new(".shield/index".to_string());
         index_file.create_file();
 
-        // TODO: PUT THESE IN AN ITERATOR OVER files_list
-        files_list.iter().for_each(|file| {
-            let content = file.read();
-            //println!("{}", &content);
-            let hash = file_log::generate_hash_id(file.get_file_name());
-            //println!("{}", file.get_file_name());
-            let new_file_name = ".shield/objects/".to_string() + &hash;
-            let f = file_basic::FileStruct::new(new_file_name);
-        
-            if is_first_commit() {
+        if(is_first_commit()) {
+            files_list.iter().for_each(|file| {
+                let content = file.read();
+                println!("{}", &content);
+                let hash = file_log::generate_hash_id(file.get_file_name());
+                println!("{}", file.get_file_name());
+                let new_file_name = ".shield/objects/".to_string() + &hash;
+                let f = file_basic::FileStruct::new(new_file_name);
                 f.create_file();
                 f.write(&content);
                 index_file.write(&hash);
-            }
-            else{
-                // TODO: Must be implemented after commit
+            });
+        }
+        else{
+            //compare_all_files(&mut files_list);
+            files_list.iter().for_each(|file| {
+                let content = file.read();
+                println!("{}", &content);
+                let hash = file_log::generate_hash_id(file.get_file_name());
+                println!("{}", file.get_file_name());
+                let new_file_name = ".shield/objects/".to_string() + &hash;
+                let f = file_basic::FileStruct::new(new_file_name);
+                f.create_file();
+                f.write(&content);
                 index_file.write(&hash);
-            }
-        });
+            });
+        }
+        // TODO: PUT THESE IN AN ITERATOR OVER files_list
         // ITERATOR ENDS HERE
     }
     else{
@@ -183,4 +215,16 @@ fn add_file_hash(){
 fn is_first_commit() -> bool{
     let master_file: FileStruct = FileStruct::new(".shield/refs/heads/master".to_string());
     return !master_file.file_is_exist();
+}
+
+fn compare_all_files(file_list: &mut Vec<FileStruct>) {
+    //get a list of all files in last commit
+    //for each file in file_list
+        //if file's contents exactly match last commit's contents
+            // add the file in ignore_list
+        // else
+            // continue
+    // for-end
+
+    // file_list = file_list - ignore_list
 }

@@ -1,6 +1,7 @@
 use crate::behaviour_hiding::output;
 use crate::machine_hiding::{os_detection,file_system_operation::file_basic};
-use crate::repository_hiding::{repository_origin,repository_local::repository_versioning};
+use crate::repository_hiding;
+use crate::repository_hiding::{repository_origin,repository_local::repository_versioning, repository_local::merge_conflict};
 
 use shellwords;
 use std::sync::Arc;
@@ -65,7 +66,7 @@ fn divide_command(args: Vec<&str>) {
                         "cd" => process_cd(args),
                         "write" => process_write(args), // only for testing
                         "ls" => process_ls(),
-                        "read" =>process_read(args),
+                        "cat" =>process_read(args),
                         "remove" => process_remove(args),
                         "mv" =>process_mv(args),
                         "remove_folder" => process_remove_folder(args),
@@ -75,6 +76,7 @@ fn divide_command(args: Vec<&str>) {
                         "add" => repository_versioning::add_files(),
                         "commit" => repository_versioning::commit_files(),
                         "clone" => process_clone(args),
+                        "merge" => repository_hiding::repository_local::merge_conflict::merge(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -215,6 +217,6 @@ fn process_clone(args: Vec<&str>){
         if let Err(e) = file_basic::clone(args[2]) {
             println!("Failed to clone the repository: {}", e);
         }
-        println!("The repository is successfully cloned!")
+        println!("The repository is successfully cloned!");
     }
 }
