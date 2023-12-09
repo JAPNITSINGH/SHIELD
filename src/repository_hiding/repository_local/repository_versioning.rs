@@ -78,7 +78,7 @@ pub fn branch_main(args:Vec<&str>) {
         let repo_path=os_detection::pwd();
         let is_repo = file_basic::folder_is_exist(".shield");
 
-        if(is_repo) {
+        if is_repo {
 
             match branch( &repo_path,branch_name, user_id) {
                 Ok(_) => println!("Branch '{}' created.", branch_name),
@@ -96,7 +96,7 @@ pub fn commit_files(){
     let new_commit: Commit = Commit::new();
     let root_node_of_tree: RootNode = RootNode::new();
     
-    if(is_first_commit()) {
+    if is_first_commit() {
         let mut f_master = file_basic::FileStruct::new(".shield/refs/heads/master".to_string());
         let mut f_master_logs = file_basic::FileStruct::new(".shield/logs/refs/heads/master".to_string());
         let mut f_commit_file = file_basic::FileStruct::new(".shield/objects/".to_string() + new_commit.get_commit_id());
@@ -169,7 +169,7 @@ pub fn add_files(){
         let index_file = FileStruct::new(".shield/index".to_string());
         index_file.create_file();
 
-        if(is_first_commit()) {
+        if is_first_commit()  {
             files_list.iter().for_each(|file| {
                 let content = file.read();
                 println!("{}", &content);
