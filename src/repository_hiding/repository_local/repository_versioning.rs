@@ -9,11 +9,11 @@ struct Commit{
     commit_hash: String
 }
 
-struct RootNode {
+pub struct RootNode {
     root_node_id: String
 }
 
-struct FileNode {
+pub struct FileNode {
     node_id: String,
     file_path: String,
 }
@@ -41,6 +41,14 @@ impl FileNode {
         }
 
         return return_list;
+    }
+
+    pub fn get_file_path(&self) -> &String {
+        return &self.file_path;
+    }
+
+    pub fn get_node_id(&self) -> &String {
+        return &self.node_id;
     }
 }
 

@@ -34,13 +34,20 @@ impl FileStruct {
     }
 
     pub fn create_file(&self) -> io::Result<()> {
+        println!("======================================================");
         let mut filepath = PathBuf::from(&self.cwd);
+        println!("&self.cwd {}", &self.cwd);
+        println!("&self.file_name {}", filepath.to_str().unwrap());
         filepath.push(&self.file_name);
+        println!("&self.cwd {}", &self.cwd);
+        println!("&self.file_name {}", filepath.to_str().unwrap());
+        println!("======================================================");
     
         match File::create(&filepath) {
             Ok(_) =>{} //output::print_message("File created successfully"),
             Err(e) => {
                 output::print_message("Failed to create file");
+                println!("{}",e);
                 return Err(e);
             }
         }

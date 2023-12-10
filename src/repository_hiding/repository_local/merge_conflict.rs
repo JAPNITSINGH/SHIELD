@@ -1,5 +1,7 @@
-use crate::{machine_hiding::file_system_operation::file_basic::{self, FileStruct}, repository_hiding::repository_local::repository_versioning};
+use std::fs::File;
 
+use crate::{machine_hiding::file_system_operation::file_basic::{self, FileStruct}, repository_hiding::repository_local::repository_versioning::{self, RootNode}};
+use crate::repository_hiding::repository_local::repository_versioning::FileNode;
 
 pub fn merge(args:Vec<&str>) {
     println!("Entering Merge");
@@ -28,26 +30,76 @@ pub fn merge(args:Vec<&str>) {
         return;
     }
 
-    let mut current_branch = FileStruct::new("shield/HEAD".to_string());
     let mut merge_branch_name = args[2];
+    println!("merge_branch_name {}",merge_branch_name);
 
     if (!repository_versioning::branch_exists(merge_branch_name)) {
         return;
     }
 
-    let mut f1 = FileStruct::new(".\\branch_1_file.txt".to_string());
-    let mut f2 = FileStruct::new(".\\branch_2_file.txt".to_string());
-    match merge_files(&f1, &f2) {
-        Ok(merged_content) => {
-            println!("Delete and Writing down");
-           f1.remove();
+    let  current_branch_path = &FileStruct::new(".shield/HEAD".to_string()).read();
+    println!("current_branch_path {}",current_branch_path);
+    let current_commit_id = FileStruct::new(".shield/".to_string() + current_branch_path).read();
+    println!("current_commit_id {}",current_commit_id);
+    let  merge_branch_path = ".shield/refs/heads/".to_string() + merge_branch_name;
+    println!("merge_branch_path {}",merge_branch_path);
+    let merge_commit_id = FileStruct::new(merge_branch_path).read();
+    println!("merge_commit_id {}",merge_commit_id);
 
-            let mut f1_new = FileStruct::new("./branch_1_file.txt".to_string());
-            f1_new.create_file();
-            f1_new.write(&merged_content[..]);
+    let current_branch_file_node_list = FileNode::get_list(RootNode::existing(
+        FileStruct::new(".shield/objects/".to_string() + &current_commit_id).read()
+    ));
+    let merge_branch_file_node_list = FileNode::get_list(RootNode::existing(
+        FileStruct::new(".shield/objects/".to_string() + &merge_commit_id).read()
+    ));
+
+    let __: Vec<_> = current_branch_file_node_list.iter().map(|file| {
+        let _: Vec<_> = merge_branch_file_node_list.iter().map(|merge_file| {
+            println!("file.get_file_path() {}",file.get_file_path());
+            println!("merge_file.get_file_path() {}",merge_file.get_file_path());
+            if (file.get_file_path() == merge_file.get_file_path()) {
+
+                let mut f1 = FileStruct::new(file.get_file_path().to_string());
+                let mut f2 = FileStruct::new(".shield/objects/".to_string() + merge_file.get_node_id());
+
+                match merge_files(&f1, &f2) {
+                    Ok(merged_content) => {
+                        println!("Delete and Writing down");
+                       f1.remove();
+                       println!("file.get_file_path().to_string() {}", file.get_file_path().to_string());
+            
+                        let mut f1_new = FileStruct::new(".".to_string() + file.get_file_path());
+                        f1_new.create_file();
+                        f1_new.write(&merged_content[..]);
+                    }
+                    Err(err) => {}
+                }
+            }
+        }).collect();
+    }).collect();
+
+    let ___: Vec<_> = merge_branch_file_node_list.iter().map(|merge_file| {
+        if(!file_exists_in_current(&current_branch_file_node_list, merge_file.get_file_path())) {
+            let new_file = FileStruct::new(merge_file.get_file_path().to_string());
+            let new_file_content = &FileStruct::new(".shield/objects/".to_string() + merge_file.get_node_id()).read();
+            new_file.create_file();
+            new_file.write(new_file_content);
         }
-        Err(err) => {}
-    }
+    }).collect();
+
+    // let mut f1 = FileStruct::new(".\\file1.txt".to_string());
+    // let mut f2 = FileStruct::new(".\\file2.txt".to_string());
+    // match merge_files(&f1, &f2) {
+    //     Ok(merged_content) => {
+    //         println!("Delete and Writing down");
+    //        f1.remove();
+
+    //         let mut f1_new = FileStruct::new(".\\file1.txt".to_string());
+    //         f1_new.create_file();
+    //         f1_new.write(&merged_content[..]);
+    //     }
+    //     Err(err) => {}
+    // }
 }
 
 fn merge_files(f1: &FileStruct, f2: &FileStruct) -> Result<String, std::io::Error> {
@@ -119,4 +171,16 @@ fn merge_files(f1: &FileStruct, f2: &FileStruct) -> Result<String, std::io::Erro
 
     println!("{}", merged_content);
     Ok(merged_content)
+}
+
+fn file_exists_in_current(current_branch_file_node_list: &Vec<FileNode>, merge_file_name: &String) -> bool {
+    let mut result = false;
+    let _: Vec<_> = current_branch_file_node_list.iter().map(|file| {
+        if file.get_file_path() == merge_file_name {
+            result = true;
+        }
+    }).collect();
+    
+    return result;
+
 }
