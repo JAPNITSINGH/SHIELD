@@ -159,7 +159,7 @@ pub fn commit_files(){
         let mut f_root_file = file_basic::FileStruct::new(".shield/objects/".to_string() + root_node_of_tree.get_root_id());
         //println!("{}", f_root_file.file_name);
         let mut f_index = file_basic::FileStruct::new(".shield/index".to_string());
-        // println!("{}",&f_index.file_name);
+       // println!("{}",&f_index.file_name);
         let index_file_content = f_index.read();
         let master_log_content = "0000000000000000000000000000000000000000 ".to_string() + new_commit.get_commit_id();
 
@@ -179,23 +179,28 @@ pub fn commit_files(){
     }
     else {
         let head_file_comtent = FileStruct::new(".shield/HEAD".to_string()).read();
-        let mut f_branch = file_basic::FileStruct::new(".shield/".to_string() + &head_file_comtent);
-        let mut f_branch_logs = file_basic::FileStruct::new(".shield/logs/".to_string() + &head_file_comtent);
+        println!("head_file_comtent {}", head_file_comtent);
+        let mut f_master = file_basic::FileStruct::new(".shield/".to_string() + &head_file_comtent);
+        let mut f_master_logs = file_basic::FileStruct::new(".shield/logs/".to_string() + &head_file_comtent);
         let mut f_commit_file = file_basic::FileStruct::new(".shield/objects/".to_string() + new_commit.get_commit_id());
         let mut f_root_file = file_basic::FileStruct::new(".shield/objects/".to_string() + root_node_of_tree.get_root_id());
         //println!("{}", f_root_file.file_name);
         let mut f_index = file_basic::FileStruct::new(".shield/index".to_string());
         //println!("{}",&f_index.file_name);
+        println!("reading index");
         let index_file_content = f_index.read();
-        let master_log_content = f_branch.read() + "\n" + new_commit.get_commit_id();
-
-        f_branch.remove();
-        f_branch.create_file();
+        let master_log_content = "\n".to_string() + &f_master.read() +" "+ new_commit.get_commit_id();
+        //println!("Master_log_content:");
+        println!("master_log_content {}",&master_log_content);
+        //println!("end_content:");
+        
+        f_master.remove();
+        f_master.create_file();
         f_commit_file.create_file();
         f_root_file.create_file();
 
-        f_branch_logs.write(&master_log_content[..]);
-        f_branch.write(new_commit.get_commit_id());
+        f_master_logs.write(&master_log_content[..]);
+        f_master.write(new_commit.get_commit_id());
         f_commit_file.write(&root_node_of_tree.get_root_id());
         f_root_file.write(&index_file_content[..]);
 
