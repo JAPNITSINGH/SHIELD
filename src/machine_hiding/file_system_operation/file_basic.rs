@@ -50,7 +50,7 @@ impl FileStruct {
     pub fn write(&self, content:&str) -> std::io::Result<()>  {
         if self.perm.writable == true{
             let mut w = OpenOptions::new().append(true).open(&self.file_name)?;
-            let c = content.to_string();
+            let c = content.to_string() + "\n";
             w.write_all(c.as_str().as_bytes())?;
         }else{
             output::print_message("The file cannot be written, you have to acquire permission first.");
@@ -69,7 +69,7 @@ impl FileStruct {
             return "The file cannot be read, you have to acquire permission first.".to_string();
         }
     }
-
+    
     pub fn remove(&self)-> io::Result<()>{
         let fpr = self.cwd.clone()+"/"+self.file_name.clone().as_str();
 
@@ -162,7 +162,7 @@ pub fn get_file_list()->Vec<FileStruct>{
     .collect();
     //FileStruct::new(new_file_name);
     // for file in &files_list {
-    //     println!("{}", file.file_name);
+        //     println!("{}", file.file_name);
     // }
     return files_list;
 }
@@ -197,7 +197,44 @@ pub fn clone(target_dir:&str)-> std::io::Result<()>{
         }
     }
     } else {
-        println!("This is not a shield repository, please check the target folder is exist and a valid shield repository or not!");
+        println!("This is not a shield repository, please enter shield init to initialize a shield repo first!");
     }
     Ok(())
+}
+pub fn heads()->Vec<String>{
+    let cwd: String = os_detection::pwd();
+
+    let cwd_shield = Path::new(&cwd).join(".shield");//full path of a .shield folder in target path
+    let mut file_names = Vec::new();
+    let head_path = Path::new(&cwd).join(".shield").join("refs").join("heads");//full path of a .shield folder in target path
+
+
+    if cwd_shield.exists() && cwd_shield.is_dir() {
+        match fs::read_dir(head_path) {
+        Ok(mut entries) => {
+            for entry in entries {
+                match entry {
+                    Ok(entry) => {
+                        let path = entry.path();
+                        if path.is_file() {
+                            if let Some(name) = path.file_name() {
+                                if let Some(name_str) = name.to_str() {
+                                    file_names.push(name_str.to_string());
+                                }
+                            }
+                        }
+                    }
+                    Err(e) => println!("Error reading entry: {}", e)
+                }
+            }
+        }
+        Err(e) => {
+            println!("Failed to read the directory: {}", e);
+        }
+    }
+    } else {
+        println!("This is not a shield repository, please enter shield init or shield clone to initialize a shield repo first!");
+    }
+    //println!("{:?}",file_names);
+    return file_names;
 }
