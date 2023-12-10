@@ -57,7 +57,7 @@ impl FileStruct {
     pub fn write(&self, content:&str) -> std::io::Result<()>  {
         if self.perm.writable == true{
             let mut w = OpenOptions::new().append(true).open(&self.file_name)?;
-            let c = content.to_string() + "\n";
+            let c = content.to_string();
             w.write_all(c.as_str().as_bytes())?;
         }else{
             output::print_message("The file cannot be written, you have to acquire permission first.");
