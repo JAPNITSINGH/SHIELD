@@ -4,6 +4,7 @@ use crate::repository_hiding;
 use crate::repository_hiding::{repository_origin,repository_local::repository_versioning, repository_local::merge_conflict};
 
 use shellwords;
+use std::os::windows::process;
 use std::sync::Arc;
 use std::{
     // env::args,
@@ -77,6 +78,8 @@ fn divide_command(args: Vec<&str>) {
                         "commit" => repository_versioning::commit_files(),
                         "clone" => process_clone(args),
                         "merge" => repository_hiding::repository_local::merge_conflict::merge(args),
+                        "checkout" => repository_hiding::repository_local::repository_versioning::checkout(args),
+                        "heads" => process_heads(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -218,5 +221,13 @@ fn process_clone(args: Vec<&str>){
             println!("Failed to clone the repository: {}", e);
         }
         println!("The repository is successfully cloned!");
+    }
+}
+fn process_heads(args: Vec<&str>){
+    if args.len() > 2{
+        println!("Heads does not need additional arguments!");
+    }else{
+        let fl = file_basic::heads().join(" ");
+        println!("{}",fl);
     }
 }
