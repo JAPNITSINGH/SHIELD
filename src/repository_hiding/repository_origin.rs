@@ -19,7 +19,7 @@ fn init_shield()-> io::Result<()>{
     
     let mut f = file_basic::FileStruct::new(".shield/HEAD".to_string());
     f.create_file();
-    let _ = f.write("ref: refs/heads/master\n");
+    let _ = f.write("refs/heads/master");
 
 
 
@@ -31,9 +31,6 @@ fn init_shield()-> io::Result<()>{
     file_basic::create_folder(".shield/refs/heads");
     file_basic::create_folder(".shield/refs/remote");
     file_basic::create_folder(".shield/refs/tags");
-
-    // Create a placeholder for the HEAD
-    //fs::write(repo.join("HEAD"), "ref: refs/heads/master\n")?;
 
     Ok(())
 }

@@ -77,6 +77,7 @@ fn divide_command(args: Vec<&str>) {
                         "commit" => repository_versioning::commit_files(),
                         "clone" => process_clone(args),
                         "merge" => repository_hiding::repository_local::merge_conflict::merge(args),
+                        "checkout" => repository_hiding::repository_local::repository_versioning::checkout(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }

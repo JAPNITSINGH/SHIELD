@@ -1,4 +1,4 @@
-use crate::machine_hiding::file_system_operation::file_basic::{self, FileStruct};
+use crate::{machine_hiding::file_system_operation::file_basic::{self, FileStruct}, repository_hiding::repository_local::repository_versioning};
 
 
 pub fn merge(args:Vec<&str>) {
@@ -23,9 +23,20 @@ pub fn merge(args:Vec<&str>) {
     // maybe the user needs to do it by himself
     // shield add 
     // shield commit
+    if args.len()!=3 {
+        println!("Invalid checkout command syntax");
+        return;
+    }
 
-    let mut f1 = FileStruct::new("./branch_1_file.txt".to_string());
-    let mut f2 = FileStruct::new("./branch_2_file.txt".to_string());
+    let mut current_branch = FileStruct::new("shield/HEAD".to_string());
+    let mut merge_branch_name = args[2];
+
+    if (!repository_versioning::branch_exists(merge_branch_name)) {
+        return;
+    }
+
+    let mut f1 = FileStruct::new(".\\branch_1_file.txt".to_string());
+    let mut f2 = FileStruct::new(".\\branch_2_file.txt".to_string());
     match merge_files(&f1, &f2) {
         Ok(merged_content) => {
             println!("Delete and Writing down");
