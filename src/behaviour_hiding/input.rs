@@ -224,7 +224,8 @@ fn process_clone(args: Vec<&str>){
         if let Err(e) = file_basic::clone(args[2]) {
             println!("Failed to clone the repository: {}", e);
         }
-        println!("The repository is successfully cloned!");
+
+        
     }
 }
 fn process_heads(args: Vec<&str>){

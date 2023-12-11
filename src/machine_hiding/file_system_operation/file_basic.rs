@@ -190,7 +190,8 @@ pub fn clone(target_dir:&str)-> std::io::Result<()>{
                     } else {
                         fs::copy(path, &target_path)?;
                     }
-                }              
+                }          
+                println!("The repository is successfully cloned!");    
             } else {
                 println!("The directory is not empty. Failed to clone!");
             }
