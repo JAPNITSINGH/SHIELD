@@ -22,11 +22,11 @@ impl FileNode {
     pub fn get_list(root_node: RootNode) -> Vec<Self> {
         let mut return_list: Vec<Self> = Vec::new();
         let root_file_name = ".shield/objects/".to_string() + &root_node.get_root_id().to_string();
-        println!("root_file_name {}", root_file_name );
+        // println!("root_file_name {}", root_file_name );
         let mut root_file_content = FileStruct::new(root_file_name).read();
-        println!("root_file_content {}", root_file_content);
+        // println!("root_file_content {}", root_file_content);
         let mut root_file_lines: Vec<&str> = root_file_content.lines().collect();
-        print!("root_file_lines {} {}", root_file_lines.get(0).unwrap(), root_file_lines.get(1).unwrap());
+        // print!("root_file_lines {} {}", root_file_lines.get(0).unwrap(), root_file_lines.get(1).unwrap());
         // root_file_lines.into_iter().map(|line| {
 
         // });
@@ -35,8 +35,8 @@ impl FileNode {
             let line_content: Vec<&str> = line.split_whitespace().collect();
             let node_id = line_content.get(0).unwrap();
             let file_path = line_content.get(1).unwrap();
-            println!("node_id {}", node_id);
-            println!("file_path {}", file_path);
+            // println!("node_id {}", node_id);
+            // println!("file_path {}", file_path);
             return_list.push(FileNode { node_id: node_id.to_string(), file_path: file_path.to_string() })
         }
 

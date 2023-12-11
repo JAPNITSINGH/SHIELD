@@ -1,4 +1,5 @@
 use crate::behaviour_hiding::output;
+use crate::machine_hiding::file_log;
 use crate::machine_hiding::{os_detection,file_system_operation::file_basic};
 use crate::repository_hiding;
 use crate::repository_hiding::{repository_origin,repository_local::repository_versioning, repository_local::merge_conflict};
@@ -79,6 +80,8 @@ fn divide_command(args: Vec<&str>) {
                         "merge" => repository_hiding::repository_local::merge_conflict::merge(args),
                         "checkout" => repository_hiding::repository_local::repository_versioning::checkout(args),
                         "heads" => process_heads(args),
+                        "log" => file_log::log(),
+                        "diff" => repository_hiding::repository_local::merge_conflict::diff(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }

@@ -6,7 +6,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::io::{self, ErrorKind};
-
+use crate::behaviour_hiding::output;
+use crate::{machine_hiding::file_system_operation::file_basic::{self, FileStruct}};
 
 pub fn generate_hash_id(filename: &String) -> String {
     let now = SystemTime::now();
@@ -46,7 +47,22 @@ pub fn pull(from: &str, to: &str) -> io::Result<()> {
 }
 
 
+pub fn log() {
+    // get current branch from .shield/HEAD
+    // get the contents from .sheld/logs/<>
+    // split with respect to \n
+    // print the second part from each split
 
+    let head_file_comtent = FileStruct::new(".shield/HEAD".to_string()).read();
+    let mut f_logs = file_basic::FileStruct::new(".shield/logs/".to_string() + &head_file_comtent).read();
+
+    let lines: Vec<&str> = f_logs.lines().collect();
+
+    lines.into_iter().map(|line| {
+        let words: Vec<&str> = line.split_whitespace().collect();
+        output::print_message(words.get(1).unwrap());
+    }).collect()
+}
 
 
 
