@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs::{self, File};
 use std::ops::IndexMut;
 use std::path::Path;
@@ -193,7 +194,14 @@ pub fn commit_files(){
         //println!("Master_log_content:");
         println!("master_log_content {}",&master_log_content);
         //println!("end_content:");
-        
+        let mut f_master = file_basic::FileStruct::new(".shield/refs/heads/master".to_string());
+        let master_content= f_master.read();
+        let mut f_hash_master = file_basic::FileStruct::new(".shield/objects/".to_string()+&master_content);
+        let hash_master_content= f_hash_master.read();
+        let mut root_object = file_basic::FileStruct::new(".shield/objects/".to_string()+ &hash_master_content);
+        let root_master_content= root_object.read();
+
+        let updated_root_master_content = create_union(&index_file_content, &root_master_content);
         f_master.remove();
         f_master.create_file();
         f_commit_file.create_file();
@@ -202,12 +210,11 @@ pub fn commit_files(){
         f_master_logs.write(&master_log_content[..]);
         f_master.write(new_commit.get_commit_id());
         f_commit_file.write(&root_node_of_tree.get_root_id());
-        f_root_file.write(&index_file_content[..]);
+        f_root_file.write(&updated_root_master_content[..]);
 
-        println!("{}", &index_file_content);
+        println!("{}", &updated_root_master_content);
 
         f_index.remove();
-
     }
 
 }
@@ -246,8 +253,9 @@ pub fn add_files(){
             });
         }
         else{
-            //compare_all_files(&mut files_list);
-            files_list.iter().for_each(|file| {
+            println!("Not first commit");
+            let updated_files_list =compare_all_files(&mut files_list);
+            updated_files_list.iter().for_each(|file| {
                 let content = file.read();
                 println!("{}", &content);
                 let mut hash = file_log::generate_hash_id(file.get_file_name());
@@ -281,7 +289,39 @@ fn is_first_commit() -> bool{
     return !master_file.file_is_exist();
 }
 
-fn compare_all_files(file_list: &mut Vec<FileStruct>) {
+fn compare_all_files(files_list: &mut Vec<FileStruct>) ->Vec<&FileStruct> {
+    let cwd = os_detection::pwd();
+    let mut updated_files_list: Vec<&FileStruct> = vec![];
+    let mut f_master = file_basic::FileStruct::new(".shield/refs/heads/master".to_string());
+    let master_content= f_master.read();
+    let mut f_hash_master = file_basic::FileStruct::new(".shield/objects/".to_string()+&master_content);
+    let hash_master_content= f_hash_master.read();
+    let mut root_object = file_basic::FileStruct::new(".shield/objects/".to_string()+ &hash_master_content);
+    let root_master_content= root_object.read();
+    let path_hash_map = process_content(&root_master_content);
+    files_list.iter().for_each(|file_path| {
+        match path_hash_map.get(&file_path.file_name) {
+            Some(hash) => {
+                println!("Path name:{}", file_path.file_name);
+                let current_hash_file= file_basic::FileStruct::new(".shield/objects/".to_string()+ &hash);
+                let current_hash_file_content= current_hash_file.read();
+                //let current_path_file= file_basic::FileStruct::new(cwd.to_string() + &file_path.file_name);
+                let current_path_file_content = file_path.read();
+                println!("current_hash_file_content: {}",current_hash_file_content);
+                println!("current_path_file_content: {}", current_path_file_content);
+                if(current_hash_file_content != current_path_file_content)
+                {
+                    updated_files_list.push(file_path);
+                }
+            },
+            None => {
+                updated_files_list.push(file_path);
+            },
+        }
+    });
+
+    return updated_files_list;
+    
     //get a list of all files in last commit
     //for each file in file_list
         //if file's contents exactly match last commit's contents
@@ -292,6 +332,51 @@ fn compare_all_files(file_list: &mut Vec<FileStruct>) {
 
     // file_list = file_list - ignore_list
 }
+
+fn parse_content(content: &str) -> HashMap<String, String> {
+    content.lines()
+        .filter_map(|line| {
+            let parts: Vec<&str> = line.splitn(2, ' ').collect();
+            if parts.len() == 2 {
+                Some((parts[1].to_string(), parts[0].to_string())) // (path, hash)
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
+fn create_union(index_file_content: &str, root_master_content: &str) -> String {
+    let mut root_map = parse_content(root_master_content);
+    let index_map = parse_content(index_file_content);
+
+    // Update or add entries from index_map to root_map
+    for (path, hash) in index_map {
+        root_map.insert(path, hash);
+    }
+
+    // Convert the updated root_map back to a string
+    root_map.into_iter()
+        .map(|(path, hash)| format!("{} {}", hash, path))
+        .collect::<Vec<String>>()
+        .join("\n")
+}
+
+
+fn process_content(root_master_content: &str) -> HashMap<String, String> {
+    root_master_content.lines().fold(HashMap::new(), |mut acc, line| {
+        let parts: Vec<&str> = line.splitn(2, ' ').collect();
+
+        if parts.len() == 2 {
+            let hash = parts[0].to_string();
+            let f_path = parts[1].to_string();
+            acc.insert(f_path, hash);
+        }
+
+        acc
+    })
+}
+
 
 pub fn checkout(args:Vec<&str>) {
     if args.len()!=3 {

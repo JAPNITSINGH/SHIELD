@@ -5,7 +5,7 @@ use crate::repository_hiding;
 use crate::repository_hiding::{repository_origin,repository_local::repository_versioning, repository_local::merge_conflict};
 
 use shellwords;
-
+use std::sync::Arc;
 use std::{
     // env::args,
     io::{self, Write},
