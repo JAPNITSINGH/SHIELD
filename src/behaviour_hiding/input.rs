@@ -68,7 +68,7 @@ fn divide_command(args: Vec<&str>) {
                         "write" => process_write(args), // only for testing
                         "ls" => process_ls(),
                         "cat" =>process_read(args),
-                        "remove" => process_remove(args),
+                        "rm" => process_remove(args),
                         "mv" =>process_mv(args),
                         "remove_folder" => process_remove_folder(args),
                         "folder_is_exist" => process_is_exist(args),
@@ -82,6 +82,8 @@ fn divide_command(args: Vec<&str>) {
                         "heads" => process_heads(args),
                         "log" => file_log::log(),
                         "diff" => repository_hiding::repository_local::merge_conflict::diff(args),
+                        "push" => process_push(args),
+                        "pull" => process_pull(args),
                         _ => println!("{} is not a valid shield command, please type shield help if you have any questions",args[1])
                     }
         }
@@ -231,5 +233,23 @@ fn process_heads(args: Vec<&str>){
     }else{
         let fl = file_basic::heads().join(" ");
         println!("{}",fl);
+    }
+}
+fn process_pull(args: Vec<&str>){
+    if args.len()>3{
+        output::print_message("No space in the path, if you insist, please add double quote on the path");
+    }else if args.len()<=2{
+        output::print_message("Please enter which repo you want to pull");
+    }else{
+        repository_origin::push(args[2],&os_detection::pwd());
+    }
+}
+fn process_push(args: Vec<&str>){
+    if args.len()>3{
+        output::print_message("No space in the path, if you insist, please add double quote on the path");
+    }else if args.len()<=2{
+        output::print_message("Please enter which repo you want to push");
+    }else{
+        repository_origin::push(&os_detection::pwd(),args[2]);
     }
 }
