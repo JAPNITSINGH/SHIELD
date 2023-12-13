@@ -38,9 +38,15 @@ fn init_shield()-> io::Result<()>{
 }
 
 pub fn init_main() {
-    match init_shield() {
-        Ok(_) => println!("Repository initialized"),
-        Err(e) => println!("Failed to initialize repository: {}", e),
+    let is_repo = file_basic::folder_is_exist(".shield");
+    if is_repo{
+        println!("Repository already exists");
+    }
+    else{
+        match init_shield() {
+            Ok(_) => println!("Repository initialized"),
+            Err(e) => println!("Failed to initialize repository: {}", e),
+        }
     }
 }
 
